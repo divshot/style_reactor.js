@@ -10,43 +10,76 @@
       body {
         padding-top: 60px;
       }
+      
+      textarea {
+        font-family: monospace;
+      }
     </style>
+    <style id="compiled"></style>
   </head>
   
   <body>
     <div class="container">
       <div class="hero-unit">
         <h1>style_reactor.js</h1>
-        <p>Compile LESS and Stylus in real-time using Web Workers.</p>
-        <p></p>
+        <p>Compile CSS Preprocessors in real-time using Web Workers.</p>
       </div>
-      <form>
+      <form class="form-inline">
         <div class="row">
           <div class="span6">
             <textarea class="input-block-level" rows="9" id="input"></textarea>
-            <select id="type">
-              <option value="less">LESS</option>
-              <option value="stylus">Stylus</option>
-            </select>
           </div>
           <div class="span6">
             <textarea class="input-block-level ds-appended" rows="9" id="output"></textarea>
           </div>
         </div>
+        <hr>
+        <div class="row">
+          <div class="span4">
+            <select id="type">
+              <option value="less">LESS</option>
+              <option value="stylus">Stylus</option>
+            </select>&nbsp;&nbsp;
+            <label for="apply">
+              <input id="apply" type="checkbox">
+              Apply to Page
+            </label>
+        </div>
+        <div class="span8">
+          <div class="alert alert-danger hidden" id="error"></div>
+        </div>
+        </div>
       </form>
     </div>
     <script type="text/javascript">
       var reactor = new Worker("js/style_reactor.js");
-      $("#input").keyup(function() {
+
+      var compileCSS = function() {
         reactor.postMessage({
           type: $("#type").val(),
           source: $("#input").val()
         });
-      });
+      }
+      
+      $("#input").keyup(compileCSS);
+      $("#apply, #type").change(compileCSS);
       
       reactor.addEventListener("message", function(e) {
-        if (e.data.error){ console.log(e.data) } else {
-        $("#output").val(e.data.css);
+        if (!e.data) { return; }
+        
+        if (e.data.error){
+          $("#error").text(e.data.error).removeClass('hidden');
+        } else if (e.data.css) {
+          $("#error").addClass('hidden');
+          $("#output").val(e.data.css);
+          
+          if ($("#apply").is(":checked")) {
+            $("#compiled").text(e.data.css);
+          } else {
+            $("#compiled").text('');
+          }
+        } else {
+          $("#error").text("An unknown error occurred during compilation.").removeClass('hidden'); 
         }
       });
     </script>

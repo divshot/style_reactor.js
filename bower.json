@@ -10,7 +10,7 @@
     "tests"
   ],
   "dependencies": {
-    "less.js":"",
+    "less.js":"https://raw.github.com/less/less.js/master/dist/less-1.4.1.js",
     "stylus.js":"http://learnboost.github.io/stylus/stylus.js"
   }
 }

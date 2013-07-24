@@ -1,7 +1,8 @@
-var window = this;
+var window = {};
 var document = {getElementsByTagName: function(){ return []}};
 
 var parsers = {}
+
 var compilers = {
   less: function(data) {
     if (!parsers.less) {
@@ -20,7 +21,7 @@ var compilers = {
   
   stylus: function(data) {
     if (!parsers.stylus) {
-      importScripts("../bower_components/stylus.js/index.js");
+      importScripts("//cdnjs.cloudflare.com/ajax/libs/stylus/0.32.1/stylus.min.js");
       parsers.stylus = stylus;
     }
     
