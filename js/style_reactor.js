@@ -1,12 +1,13 @@
-var window = {};
-var document = {getElementsByTagName: function(){ return []}};
+window = this;
+document = {getElementsByTagName: function(){ return []}};
 
 var parsers = {}
+var config = {}
 
 var compilers = {
   less: function(data) {
     if (!parsers.less) {
-      importScripts("//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js");
+      importScripts(config.less || "//cdnjs.cloudflare.com/ajax/libs/less.js/1.4.1/less.min.js");
       parsers.less = new(less.Parser);
     }
     
@@ -21,7 +22,7 @@ var compilers = {
   
   stylus: function(data) {
     if (!parsers.stylus) {
-      importScripts("//cdnjs.cloudflare.com/ajax/libs/stylus/0.32.1/stylus.min.js");
+      importScripts(config.stylus || "//learnboost.github.io/stylus/stylus.js");
       parsers.stylus = stylus;
     }
     
@@ -40,6 +41,8 @@ self.addEventListener("message",function(e) {
   
   if (compilers[data.type]) {
     self.postMessage(compilers[data.type](data));
+  } else if (data.config) {
+    config = data.config;
   } else {
     self.postMessage({error: "Could not find a parser for type '" + data.type + "'."});
   }
