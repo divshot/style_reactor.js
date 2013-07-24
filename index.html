@@ -1,0 +1,55 @@
+<html>
+  
+  <head>
+    <title>Style Reactor - Compile LESS and Stylus in a Web Worker</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <style>
+      body {
+        padding-top: 60px;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="container">
+      <div class="hero-unit">
+        <h1>style_reactor.js</h1>
+        <p>Compile LESS and Stylus in real-time using Web Workers.</p>
+        <p></p>
+      </div>
+      <form>
+        <div class="row">
+          <div class="span6">
+            <textarea class="input-block-level" rows="9" id="input"></textarea>
+            <select id="type">
+              <option value="less">LESS</option>
+              <option value="stylus">Stylus</option>
+            </select>
+          </div>
+          <div class="span6">
+            <textarea class="input-block-level ds-appended" rows="9" id="output"></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+    <script type="text/javascript">
+      var reactor = new Worker("js/style_reactor.js");
+      $("#input").keyup(function() {
+        reactor.postMessage({
+          type: $("#type").val(),
+          source: $("#input").val()
+        });
+      });
+      
+      reactor.addEventListener("message", function(e) {
+        if (e.data.error){ console.log(e.data) } else {
+        $("#output").val(e.data.css);
+        }
+      });
+    </script>
+  </body>
+
+</html>

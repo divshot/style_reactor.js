@@ -1,0 +1,16 @@
+{
+  "name": "style_reactor",
+  "version": "0.0.0",
+  "main": "js/style_reactor.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "less.js":"",
+    "stylus.js":"http://learnboost.github.io/stylus/stylus.js"
+  }
+}
