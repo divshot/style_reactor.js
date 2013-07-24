@@ -23,7 +23,8 @@ the message will look something like this:
 
 ```json
 {"error": "The error message goes here."}
-    
+```
+
 If the compilation succeeded, the message will look like this:
 
 ```json
